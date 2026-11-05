@@ -1,12 +1,29 @@
-import { cpSync, mkdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
-const api = process.env.API_ORIGIN || 'https://learning-room-api.150.109.157.214.sslip.io';
-if (!/^https:\/\/[a-z0-9.-]+$/.test(api)) throw new Error('API_ORIGIN must be an HTTPS origin without a trailing slash.');
-rmSync('dist', { recursive: true, force: true });
-cpSync('public', 'dist', { recursive: true });
-writeFileSync('dist/config.js', `export const API_ORIGIN = ${JSON.stringify(api)};\n`);
-mkdirSync('dist/assets', { recursive: true });
-cpSync('docs/product-plan.md', 'dist/assets/product-plan.md');
-const html = readFileSync('dist/index.html', 'utf8').replaceAll('__API_ORIGIN__', api);
-writeFileSync('dist/index.html', html);
-writeFileSync('dist/.nojekyll', '');
+import {
+  cpSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync,
+  readFileSync,
+} from "node:fs";
+const api =
+  process.env.API_ORIGIN ||
+  "https://learning-room-api.150.109.157.214.sslip.io";
+if (!/^https:\/\/[a-z0-9.-]+$/.test(api))
+  throw new Error(
+    "API_ORIGIN must be an HTTPS origin without a trailing slash.",
+  );
+rmSync("dist", { recursive: true, force: true });
+cpSync("public", "dist", { recursive: true });
+writeFileSync(
+  "dist/config.js",
+  `export const API_ORIGIN = ${JSON.stringify(api)};\n`,
+);
+mkdirSync("dist/assets", { recursive: true });
+cpSync("docs/product-plan.md", "dist/assets/product-plan.md");
+const html = readFileSync("dist/index.html", "utf8").replaceAll(
+  "__API_ORIGIN__",
+  api,
+);
+writeFileSync("dist/index.html", html);
+writeFileSync("dist/.nojekyll", "");
 console.log(`Static frontend built for ${api}`);

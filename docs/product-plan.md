@@ -42,7 +42,7 @@ Use explicit objectives, teacher modelling, guided practice, independent practic
 
 Differentiation changes scaffolding and task demand while preserving the objective. The same learner may need support in one skill and stretch in another. Suggested routes are editable, contextual and temporary. They are not diagnoses or permanent ability labels.
 
-Core practice uses a transparent answer key and misconception explanation. Writing and reasoning require teacher review. Optional stretch work receives separate recognition; it must not distort core evidence or penalise learners who need more time. Pilot a qualitative rubric before introducing bonus marks.
+Core practice uses a transparent answer key and misconception explanation. Writing and reasoning require teacher review. Optional stretch work receives separate recognition; it must not distort core evidence or penalise learners who need more time. The pilot supports 0 to 3 teacher-awarded challenge marks, stored separately with required evidence for any award. The mark range is a pilot assumption to review with teachers.
 
 Lesson segment lengths are editable planning choices. No universal attention-span formula is assumed. An engagement rating is a teacher observation in context, not a mental-health, disability or attention diagnosis. Evaluate teaching quality through sampled lesson review, learner work and teacher reflection, rather than one satisfaction score.
 
@@ -139,7 +139,7 @@ Targets are not product results. The public impact register starts with no recor
 - Editable lesson rhythm and printable learner activities.
 - Fictional learner profiles with school, availability, device/print preference and skill observations.
 - Class planning with room/learner conflicts, capacity, reserved community places and changeover checks.
-- Teacher reflections updating the selected learner skill and retaining evidence.
+- Teacher reflections updating the selected learner skill and retaining evidence; optional challenge marks and their justification remain separate from core learning.
 - Impact evidence log with signed differences, offered/used places, source notes and reported incidents.
 
 ### Next release priorities
