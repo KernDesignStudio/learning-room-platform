@@ -1,0 +1,7 @@
+.git
+.local
+.env
+artifacts
+.taste-skill
+dist
+node_modules
