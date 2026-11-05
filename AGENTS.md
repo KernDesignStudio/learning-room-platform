@@ -8,3 +8,4 @@
 - ESG means environmental, social and governance. Funding eligibility, certification, endorsement, partner commitments and impact results must never be invented.
 - Frontend: GitHub Pages, no custom domain. API: isolated Coolify application with a persistent SQLite volume. Never alter other client resources.
 - Backend tests must cover workspace isolation, validation, conflicting bookings and truthful impact calculations. Verify both live hosts after deployment.
+- API releases are pinned. Set Coolify `git_commit_sha` and build-time `SOURCE_COMMIT` to the same full accepted commit, then verify provider status and `/health`. A frontend-only release does not require redeploying the API. Read docs/release.md before changing the deployment.

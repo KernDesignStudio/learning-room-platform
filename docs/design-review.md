@@ -18,6 +18,8 @@ Final public-page inspection: 1440, 768 and 390px; zero failures. The single vid
 
 The public page has a large focal headline and teaching-folder object, consistent edges, readable copy, varied section proportions, complete functional destinations and four authentic interface images. The phone layout changes composition and uses a mobile product image. No endorsement, impact or usage figures are fabricated.
 
+The accessibility scan identified reduced contrast during a folder entrance. Folder panels now stay opaque while moving, preserving text contrast throughout. The skip link was also corrected and tested to focus the current page's main content without activating the hash router. Automated checks found no WCAG A/AA violations across the eight reviewed routes after these corrections; this does not replace an independent accessibility review.
+
 Self-review after corrections: design 8/10; usability 8.5/10; creativity 7.5/10; content 8.5/10. Weighted score: 8.1/10. This is an internal design review, not an external award or user-study result. A real teaching pilot and broader accessibility audit remain necessary.
 
 ## Interaction evidence

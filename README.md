@@ -50,6 +50,17 @@ The GitHub Actions workflow tests and builds the frontend, then publishes it to 
 
 Coolify project: `Learning Room` (`j31f0ehepmyifhg8ljuolopi`). Application: `learning-room-api` (`ncv5prgpnhz3ij6toyue5tdo`). Application resource identifiers are not credentials.
 
+For a future API release, explicitly set the application's `git_commit_sha` and build-time `SOURCE_COMMIT` to the same full target commit, deploy, and compare the provider's finished commit with `/health`. The API is pinned to its accepted code release, independently of frontend-only publications. See [release evidence](docs/release.md).
+
+Browser integration checks use the installed taste-skill browser driver and run in a disposable headless browser:
+
+```sh
+node scripts/browser-check.mjs
+TEST_URL=https://orbiting0314.github.io/learning-room-platform/ node scripts/browser-check.mjs
+```
+
+Use `TASTE_BROWSER_MODULE` to point to a different installation of taste-skill's `scripts/lib/cdp.mjs`. The checks create and delete only their own fictional demonstration workspace.
+
 ## Visual system
 
 Taste-skill: “The page is the object”, seed `109926159`. Shared-objective lesson folders become the public-page composition. General Sans and a green-black/bone/jade palette carry into the teaching workspace. Product-page screenshots show this real application with fictional sample data. No AI images or stock classroom photography are used.

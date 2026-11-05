@@ -92,7 +92,12 @@ try {
     "today page",
   );
   assert.equal((await exportState()).state.learners.length, 6);
-  mark("separate workspace opens with six fictional learners");
+  await click(".skip-link");
+  assert.equal(await page.eval(() => document.activeElement.id), "main");
+  assert.equal(await page.eval(() => location.hash), "#/today");
+  mark(
+    "separate workspace opens with six fictional learners and a working skip link",
+  );
   await route("studio");
   assert.equal(
     await page.eval(
