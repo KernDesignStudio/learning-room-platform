@@ -1,68 +1,123 @@
 # Learning Room
 
-A standalone learning-centre product pilot by KERN Design Studio, built on 5 November 2026. English P4 to P6; all starting learner and school information is fictional.
+Source code from the learning-centre prototype shared in **Living and building in the AI era**, CUHK LDTE 3120, on 5 November 2026.
 
-- Frontend: https://orbiting0314.github.io/learning-room-platform/
-- Teaching workspace: https://orbiting0314.github.io/learning-room-platform/#/today
-- Product and pilot plan: https://orbiting0314.github.io/learning-room-platform/#/plan
-- API health: https://learning-room-api.150.109.157.214.sslip.io/health
+[Try the live demo](https://orbiting0314.github.io/learning-room-platform/#/) · [Read the classroom prompt](docs/classroom-prompt.md) · [Fork the project](https://github.com/Orbiting0314/learning-room-platform/fork)
 
-See [the full product plan](docs/product-plan.md) for the problem mapping, pedagogy, environmental/social/governance measures, economic assumptions, current funding constraints and proposed evaluation. Publication and live verification are recorded separately in `docs/release.md` when completed.
+![Learning Room's teacher workspace, with fictional learners and a planned English lesson](public/assets/workspace.webp)
 
-## Workflows
+## A note from Thomas
 
-1. Open the teaching workspace. A separate demonstration workspace is created and saved on the API.
-2. Prepare a lesson in Lesson studio. Choose a skill activity and Support, Core or Stretch route, edit the objective/instructions, select learners and adjust the lesson rhythm.
-3. Review suitability, mark teacher approval and save a separate teaching-note version.
-4. Open Learner preview, try core answers, inspect explanatory feedback and try the optional writing challenge. Writing uses a review rubric, without an automatic grade.
-5. Print a learner activity without the teacher’s answer feedback or private notes.
-6. Add fictional learner aliases with school, availability and access preference. Record an observation to update one skill at a time.
-7. Plan, edit or cancel a dated class. The API checks teacher, room and learner conflicts, changeover buffers, capacity and availability. Cancelled records retain their history.
-8. Record print/preparation baselines, actual figures, community places offered/used and neighbour incidents with a source note. Differences may be negative; no carbon conversion is made.
-9. Export the workspace or use About this demo to delete it from the server.
+Thank you for joining the session and for the questions afterwards. Several of you asked for the code, so I am sharing it here for you to explore, change and build on.
 
-## Run and verify
+You do not need to understand the whole application before you begin. Pick one activity, change an instruction, try a different feedback message, or add a question of your own. Run it, see what happens and ask someone to try it. Each small experiment gives you something concrete to learn from.
 
-Node.js 24 is required. No npm installation or runtime dependencies are needed.
+The habits I hope you take away are to understand the people you are building for, make the next step small enough to finish, and check whether your work actually helps. Keep asking questions and keep making things. I would be glad to hear what you try.
+
+**Thomas Pang**, co-founder of KERN Design Studio
+
+## About KERN Design Studio
+
+[KERN Design Studio (KDS)](https://kerndesignstudio.me/) is a Hong Kong digital studio. We build custom websites and business systems, and use AI to help turn ideas into practical software.
+
+Our work starts with understanding a real problem, then shaping an idea into something people can try, review and improve. Our aim is to make technology accessible to more people, including those who do not come from a technical background.
+
+## About this example
+
+Learning Room connects lesson preparation, different learner needs, teacher reflection and class planning in one small application. Its English examples are designed for P4 to P6 learners.
+
+The application was developed with AI assistance. **I set up the harness used for this demonstration myself. Its private configuration is not included in the shared materials.** This repository contains the application source and tests for you to study and adapt.
+
+The [classroom prompt](docs/classroom-prompt.md) shares the product-focused brief. Use it to explore how a problem description becomes features, workflows and checks. The [product plan](docs/product-plan.md) explains the educational, environmental, social and economic questions behind the prototype.
+
+## Run it on your computer
+
+Install **Node.js 24 or later** from [nodejs.org](https://nodejs.org/). You do not need a paid AI account, API key or cloud account to run the local application.
 
 ```sh
+git clone https://github.com/Orbiting0314/learning-room-platform.git
+cd learning-room-platform
 npm start
+```
+
+Open **http://127.0.0.1:8788/** while the terminal stays open. Press **Ctrl+C** in that terminal to stop it. If you prefer, use GitHub's **Code**, then **Download ZIP**, extract the folder and run `npm start` inside it.
+
+The application itself has no runtime packages to install. Its local server serves the interface and stores demonstration work in a local SQLite file. Your local copy is separate from the online demo.
+
+Use fictional information while experimenting. This is a teaching prototype; a real learner service needs the institutional arrangements described in the product plan.
+
+## What you can explore
+
+- Adapt a shared learning objective with Support, Core and Stretch instructions.
+- Preview learner practice, check core answers and review writing with a rubric.
+- Award optional challenge marks separately from core learning evidence.
+- Print learner activities without the teacher's private notes or answer feedback.
+- Record observations across grammar, sentence structure, writing, listening and reading.
+- Plan classes around learner availability, teachers, rooms, capacity and changeover time.
+- Keep evidence about printing, preparation time, community places and reported neighbour incidents.
+
+All starting learners, schools, classes and observations are fictional. The impact register starts without measured results; funding, endorsement and educational effectiveness have not been established by this demo.
+
+## Find your way around the code
+
+| File or folder | What to look for |
+| --- | --- |
+| [public/content.js](public/content.js) | The original sample activities, feedback and learning routes. A useful first place to experiment. |
+| [public/app.js](public/app.js) | The interface and the teacher and learner workflows. |
+| [public/styles.css](public/styles.css) | Layout, colours, responsive behaviour and control states. |
+| [server/domain.mjs](server/domain.mjs) | Rules for lessons, observations, bonus marks and class planning. |
+| [server/index.mjs](server/index.mjs) | The application service and local data storage. |
+| [tests/](tests/) | Examples of checking expected behaviour and difficult cases. |
+| [docs/classroom-prompt.md](docs/classroom-prompt.md) | The product-focused classroom brief and questions to consider. |
+
+## A few experiments to try
+
+1. Add a new activity with one clear learning objective and a useful explanation for each answer.
+2. Adapt a task for a different learner group. Explain why you changed the support.
+3. Improve one interaction for someone using a keyboard or a small screen.
+4. Add a class-planning rule, then write a test for a booking that should be rejected.
+5. Ask a teacher or classmate to try your version. Use what you observe to decide the next change.
+
+Keep examples fictional and review the suitability of teaching content before using it with learners.
+
+## Check your changes
+
+These commands need only Node.js:
+
+```sh
 npm test
 npm run check
 npm run build
 ```
 
-The local server is at http://127.0.0.1:8788 and serves `public/` with the same-origin API. `npm run build` copies the static app to `dist/`, writes its API configuration and includes the product plan. The frontend uses hash routes so a GitHub Pages project path works without server routing.
-
-Environment options: `PORT` (8788), `DB_PATH` (`.local/learning-room.sqlite`), `ALLOWED_ORIGINS` (comma-separated origins), `SERVE_STATIC` (false in the API container), `RELEASE_SHA` (deployment identity), `API_ORIGIN` (static build only). No credentials belong in source or CLI output.
-
-## Boundaries
-
-This public demonstration is not an institutional student-record system. Use fictional information only. Browser storage contains a high-entropy workspace access token. The API stores only its hash; anyone using the same browser profile can access the demonstration workspace. Workspaces expire seven days after creation or their latest save. Cleanup occurs on subsequent API traffic. A persistent Docker volume is not an offsite backup.
-
-Practice responses stay in tab memory. There is no model API, external analytics, paid messaging, school-data integration or payment processing. The current sample library is curated and original. Outcomes, partnerships, endorsements and funding eligibility are unconfirmed. All numbers in the economic model and pilot targets are assumptions.
-
-Real learner use requires accountable accounts and roles, institutional privacy/consent arrangements, safeguarding, backups and recovery drills, and independent review. These are described in the plan; they are not claimed as delivered production controls.
-
-## Deployment
-
-The GitHub Actions workflow tests and builds the frontend, then publishes it to GitHub Pages. Coolify builds `docker-compose.yml` as the separate `learning-room-api` application with a persistent named SQLite volume, a health check and bounded resources. The API uses an automatic `sslip.io` HTTPS hostname. The existing `learning-centre-demo`, `KDS-Edtech` and other client resources are separate.
-
-Coolify project: `Learning Room` (`j31f0ehepmyifhg8ljuolopi`). Application: `learning-room-api` (`ncv5prgpnhz3ij6toyue5tdo`). Application resource identifiers are not credentials.
-
-For a future API release, explicitly set the application's `git_commit_sha` and build-time `SOURCE_COMMIT` to the same full target commit, deploy, and compare the provider's finished commit with `/health`. The API is pinned to its accepted code release, independently of frontend-only publications. See [release evidence](docs/release.md).
-
-Browser integration checks use the installed taste-skill browser driver and run in a disposable headless browser:
+The optional browser checks use the public [Playwright](https://playwright.dev/) package. Keep `npm start` running in one terminal, then use another terminal:
 
 ```sh
-node scripts/browser-check.mjs
-TEST_URL=https://orbiting0314.github.io/learning-room-platform/ node scripts/browser-check.mjs
+npm ci
+npx playwright install chromium
+npm run test:browser
 ```
 
-Use `TASTE_BROWSER_MODULE` to point to a different installation of taste-skill's `scripts/lib/cdp.mjs`. The checks create and delete only their own fictional demonstration workspace.
+Browser checks create and remove only their own fictional test workspace. They do not require the private harness used to develop the original demo.
 
-## Visual system
+For an independent hosted version, see [the development notes](docs/development.md). Local use does not require deployment.
 
-Taste-skill: “The page is the object”, seed `109926159`. Shared-objective lesson folders become the public-page composition. General Sans and a green-black/bone/jade palette carry into the teaching workspace. Product-page screenshots show this real application with fictional sample data. No AI images or stock classroom photography are used.
+## Use it, change it and share it
 
-General Sans is by Indian Type Foundry, available via [Fontshare](https://www.fontshare.com/fonts/general-sans). Local font files avoid runtime third-party font requests.
+The original application code, teaching samples and documentation are shared under the [MIT License](LICENSE). You are welcome to fork the repository, experiment, build your own version and share what you learn. Keep the license notice with copies of the code.
+
+See [third-party notices](THIRD_PARTY_NOTICES.md) for the optional font and project identity. The original font files are obtained separately from their publisher and are not included in this source release.
+
+If you would like to suggest an improvement, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Stay in touch
+
+If you are interested in AI, product building, education technology, or want to show me something you have made, feel free to connect:
+
+- **LinkedIn:** [Thomas Pang](https://www.linkedin.com/in/thomas-pang-501486262/)
+- **GitHub:** [Orbiting0314](https://github.com/Orbiting0314)
+- **Instagram:** [KDS @kerndesignstudio.ai](https://www.instagram.com/kerndesignstudio.ai/)
+- **Email Thomas via KDS:** [info@kerndesignstudio.me](mailto:info@kerndesignstudio.me?subject=CUHK%20Learning%20Room)
+- **KERN Design Studio:** [kerndesignstudio.me](https://kerndesignstudio.me/)
+
+Bring an idea, a prototype or a question. You can start with one small thing.

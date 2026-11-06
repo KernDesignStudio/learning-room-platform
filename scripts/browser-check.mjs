@@ -1,17 +1,20 @@
-// Integration checks in a disposable headless browser. Uses taste-skill's local browser driver.
-// TASTE_BROWSER_MODULE can point to another copy of scripts/lib/cdp.mjs.
+// Browser checks run independently using the public Playwright package.
 import assert from "node:assert/strict";
-import { homedir } from "node:os";
 import { resolve, join } from "node:path";
-import { pathToFileURL } from "node:url";
 import { mkdirSync, writeFileSync } from "node:fs";
-const modulePath =
-  process.env.TASTE_BROWSER_MODULE ||
-  join(homedir(), ".codex/skills/taste-skill/scripts/lib/cdp.mjs");
-const { Browser, sleep } = await import(pathToFileURL(modulePath));
+import { setTimeout as sleep } from "node:timers/promises";
+import { chromium } from "playwright";
 const base = process.env.TEST_URL || "http://127.0.0.1:8788/";
-const browser = await Browser.launch();
-const page = await browser.newPage();
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.BROWSER_CHANNEL
+    ? { channel: process.env.BROWSER_CHANNEL }
+    : {}),
+});
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const consoleErrors = [];
+page.on("pageerror", (error) => consoleErrors.push(error.message));
+page.on("dialog", (dialog) => dialog.dismiss());
 const out = resolve(process.env.QA_DIRECTORY || "artifacts/browser");
 mkdirSync(out, { recursive: true });
 const passed = [];
@@ -22,20 +25,20 @@ const mark = (title) => {
 async function until(fn, message, timeout = 12000) {
   const end = Date.now() + timeout;
   while (Date.now() < end) {
-    if (await page.eval(fn)) return;
+    if (await page.evaluate(fn)) return;
     await sleep(80);
   }
   throw new Error(`Timed out: ${message}`);
 }
 async function click(selector) {
-  await page.eval((s) => {
+  await page.evaluate((s) => {
     const el = document.querySelector(s);
     if (!el) throw Error("Missing " + s);
     el.click();
   }, selector);
 }
 async function fill(selector, value) {
-  await page.eval(
+  await page.evaluate(
     ({ s, v }) => {
       const el = document.querySelector(s);
       if (!el) throw Error("Missing " + s);
@@ -46,7 +49,7 @@ async function fill(selector, value) {
   );
 }
 async function choose(name, value) {
-  await page.eval(
+  await page.evaluate(
     ({ name, value }) => {
       const input = document.querySelector(`[name="${name}"]`);
       const wrap = input.closest("[data-select]");
@@ -61,7 +64,7 @@ async function choose(name, value) {
   );
 }
 async function route(name) {
-  await page.eval((name) => {
+  await page.evaluate((name) => {
     location.hash = "/" + name;
   }, name);
   await until(
@@ -74,7 +77,7 @@ async function submit(form) {
   await click(`[data-form="${form}"] button[type="submit"]`);
 }
 async function exportState() {
-  return await page.eval(async () => {
+  return await page.evaluate(async () => {
     const { API_ORIGIN } = await import("./config.js");
     const token = localStorage.getItem("learning-room.workspace.v1");
     return (
@@ -93,14 +96,14 @@ try {
   );
   assert.equal((await exportState()).state.learners.length, 6);
   await click(".skip-link");
-  assert.equal(await page.eval(() => document.activeElement.id), "main");
-  assert.equal(await page.eval(() => location.hash), "#/today");
+  assert.equal(await page.evaluate(() => document.activeElement.id), "main");
+  assert.equal(await page.evaluate(() => location.hash), "#/today");
   mark(
     "separate workspace opens with six fictional learners and a working skip link",
   );
   await route("studio");
   assert.equal(
-    await page.eval(
+    await page.evaluate(
       () =>
         document.querySelectorAll("select,input[type=date],input[type=time]")
           .length,
@@ -109,30 +112,20 @@ try {
   );
   await click('[aria-label="Activity"]');
   assert.equal(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelector("[role=listbox]:not([hidden])") !== null,
     ),
     true,
   );
   await page.screenshot({ path: join(out, "desktop-choice-open.jpg") });
-  await page.send("Input.dispatchKeyEvent", {
-    type: "keyDown",
-    key: "ArrowDown",
-    code: "ArrowDown",
-    windowsVirtualKeyCode: 40,
-  });
+  await page.keyboard.press("ArrowDown");
   assert.equal(
-    await page.eval(() => document.activeElement?.getAttribute("role")),
+    await page.evaluate(() => document.activeElement?.getAttribute("role")),
     "option",
   );
-  await page.send("Input.dispatchKeyEvent", {
-    type: "keyDown",
-    key: "Escape",
-    code: "Escape",
-    windowsVirtualKeyCode: 27,
-  });
+  await page.keyboard.press("Escape");
   assert.equal(
-    await page.eval(() =>
+    await page.evaluate(() =>
       document
         .querySelector('[aria-label="Activity"]')
         .getAttribute("aria-expanded"),
@@ -143,13 +136,13 @@ try {
   await fill("[name=title]", "QA morning routines");
   await click("[data-action=route][data-route=Support]");
   assert.equal(
-    await page.eval(() => document.querySelector("[name=title]").value),
+    await page.evaluate(() => document.querySelector("[name=title]").value),
     "QA morning routines",
   );
   await fill("[name=teacherNotes]", "Private teacher QA note");
   await click("[name=approved]");
   assert.equal(
-    await page.eval(
+    await page.evaluate(
       () =>
         getComputedStyle(document.querySelector("[name=approved]"))
           .backgroundColor,
@@ -180,11 +173,13 @@ try {
     await click(`[name="q-${q}"][value="${a}"]`);
   await submit("practice");
   assert.match(
-    await page.eval(() => document.querySelector(".core-score").textContent),
+    await page.evaluate(
+      () => document.querySelector(".core-score").textContent,
+    ),
     /2 of 3/,
   );
   assert.equal(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelectorAll(".answer-feedback.retry").length,
     ),
     1,
@@ -196,11 +191,13 @@ try {
   );
   await click("[data-action=writing-guidance]");
   assert.equal(
-    await page.eval(() => document.querySelector("#writing-guidance").hidden),
+    await page.evaluate(
+      () => document.querySelector("#writing-guidance").hidden,
+    ),
     false,
   );
   assert.match(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelector("#writing-guidance").textContent,
     ),
     /No automatic writing grade/,
@@ -212,14 +209,14 @@ try {
   mark(
     "core score and feedback work; writing is reviewed and stays out of saved records",
   );
-  await page.eval(() => {
+  await page.evaluate(() => {
     window.print = () => {
       window.__printText =
         document.querySelector(".print-handout")?.textContent;
     };
   });
   await click("[data-action=print-note]");
-  const print = await page.eval(() => window.__printText);
+  const print = await page.evaluate(() => window.__printText);
   assert.match(print, /Our learning goal/);
   assert.equal(print.includes("Private teacher QA note"), false);
   assert.equal(print.includes("After does, use the base form swim."), false);
@@ -228,7 +225,7 @@ try {
   await click("[data-action=add-learner]");
   await submit("learner");
   assert.match(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelector(".modal .form-error").textContent,
     ),
     /highlighted/,
@@ -240,7 +237,7 @@ try {
   assert.equal((await exportState()).state.learners.length, 7);
   await choose("schoolFilter", "QA Sample Primary");
   assert.equal(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelectorAll(".learner-table tbody tr").length,
     ),
     1,
@@ -274,13 +271,15 @@ try {
     "booking conflict",
   );
   assert.match(
-    await page.eval(
+    await page.evaluate(
       () => document.querySelector(".modal .form-error").textContent,
     ),
     /changeover/,
   );
   assert.equal(
-    await page.eval(() => document.querySelector(".modal [name=title]").value),
+    await page.evaluate(
+      () => document.querySelector(".modal [name=title]").value,
+    ),
     "QA class conflict",
   );
   await fill(".modal [name=title]", "QA evening class");
@@ -345,7 +344,7 @@ try {
   );
   mark("saved workspace survives a page reload");
   for (const width of [768, 390]) {
-    await page.setViewport({ width, height: 844, mobile: width === 390 });
+    await page.setViewportSize({ width, height: 844 });
     for (const name of [
       "today",
       "studio",
@@ -356,7 +355,7 @@ try {
     ]) {
       await route(name);
       assert.equal(
-        await page.eval(
+        await page.evaluate(
           () => document.documentElement.scrollWidth > innerWidth + 1,
         ),
         false,
@@ -368,23 +367,18 @@ try {
     await click('[aria-label="School level"]');
     await page.screenshot({ path: join(out, `choice-open-${width}.jpg`) });
     assert.equal(
-      await page.eval(
+      await page.evaluate(
         () => document.querySelector("[role=listbox]:not([hidden])") !== null,
       ),
       true,
     );
-    await page.send("Input.dispatchKeyEvent", {
-      type: "keyDown",
-      key: "Escape",
-      code: "Escape",
-      windowsVirtualKeyCode: 27,
-    });
+    await page.keyboard.press("Escape");
     await click("[data-action=close-modal]");
     mark(
       `six workspace routes fit at ${width}px and the styled form menu opens`,
     );
   }
-  assert.deepEqual(page.consoleErrors, []);
+  assert.deepEqual(consoleErrors, []);
   mark("no browser JavaScript exceptions");
   writeFileSync(
     join(out, "results.json"),
@@ -398,7 +392,7 @@ try {
 } finally {
   // Remove only this script's demonstration workspace. No real learner data is used.
   await page
-    .eval(async () => {
+    .evaluate(async () => {
       const token = localStorage.getItem("learning-room.workspace.v1");
       if (token) {
         const { API_ORIGIN } = await import("./config.js");

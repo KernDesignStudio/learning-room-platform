@@ -163,11 +163,11 @@ Targets are not product results. The public impact register starts with no recor
 
 ## Design and accessibility
 
-Taste-skill direction: “The page is the object”, seed 109926159. The specific teaching artefact is the shared-objective lesson folder, whose three support routes and evidence notes become the page composition. General Sans typography and the green-black/bone palette connect the public page and the workspace. The main interactive proof is the real lesson studio and learner preview.
+The interface uses a teaching-folder idea, consistent typography and a green, bone and jade palette. Public-page images are screenshots of this application with fictional examples. No classroom or learner photography is included.
 
-Public-page images are screenshots of this actual demonstration, not classroom photography or claims of real users. No AI image generation is used. Self-hosted General Sans is by Indian Type Foundry via Fontshare.
+Controls use styled open, selected, focus, error and disabled states, visible labels, keyboard navigation and touch targets. Dates use a labelled text format; time and choice controls use custom lists. Listening includes a transcript and optional device-generated speech. Motion has a reduced-motion fallback. Print and shared-device participation are supported. WCAG 2.2 AA is a design and review target, not a claim of third-party certification.
 
-Controls use styled open/selected/focus/error/disabled states, visible labels, keyboard navigation and touch targets. No visible arrows or chevrons. Dates use a labelled text format; time and choice controls use custom accessible lists. Listening includes a transcript and optional device-generated speech. Motion has a reduced-motion fallback. Print and shared-device participation are supported. WCAG 2.2 AA is a design and review target, not a claimed third-party certification.
+The source version uses an Arial/sans-serif fallback. General Sans is an optional separately licensed font obtained directly from Fontshare; see THIRD_PARTY_NOTICES.md.
 
 ## Sources
 

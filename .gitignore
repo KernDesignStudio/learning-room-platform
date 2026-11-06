@@ -3,5 +3,10 @@ node_modules/
 .env
 dist/
 .DS_Store
-.taste-skill/inspect/
+.taste-skill/
+AGENTS.md
+docs/design-review.md
+docs/release.md
+scripts/live-persistence.mjs
+public/assets/general-sans-*.woff2
 artifacts/

@@ -5,15 +5,18 @@ import {
   writeFileSync,
   readFileSync,
 } from "node:fs";
-const api =
-  process.env.API_ORIGIN ||
-  "https://learning-room-api.150.109.157.214.sslip.io";
-if (!/^https:\/\/[a-z0-9.-]+$/.test(api))
+import { prepareBrandFont } from "./brand-font.mjs";
+const api = (process.env.API_ORIGIN || "").trim();
+if (api && !/^https:\/\/[a-z0-9.-]+(?::\d{1,5})?$/.test(api))
   throw new Error(
     "API_ORIGIN must be an HTTPS origin without a trailing slash.",
   );
 rmSync("dist", { recursive: true, force: true });
 cpSync("public", "dist", { recursive: true });
+// Optional locally obtained fonts must never be copied into the default source build.
+for (const weight of [400, 500, 700])
+  rmSync(`dist/assets/general-sans-${weight}.woff2`, { force: true });
+if (process.env.BRAND_FONT === "general-sans") await prepareBrandFont("dist");
 writeFileSync(
   "dist/config.js",
   `export const API_ORIGIN = ${JSON.stringify(api)};\n`,
@@ -26,4 +29,6 @@ const html = readFileSync("dist/index.html", "utf8").replaceAll(
 );
 writeFileSync("dist/index.html", html);
 writeFileSync("dist/.nojekyll", "");
-console.log(`Static frontend built for ${api}`);
+console.log(
+  `Static frontend built for ${api || "a same-origin teaching service"}`,
+);
