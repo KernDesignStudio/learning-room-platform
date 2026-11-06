@@ -93,14 +93,16 @@ test("origin policy, sensitive static paths and malformed bodies are denied", as
     ).status,
     403,
   );
-  const allowed = await req("/api/workspaces", {
-    method: "POST",
-    origin: "https://orbiting0314.github.io",
-  });
-  assert.equal(
-    allowed.headers.get("access-control-allow-origin"),
+  const allowedOrigins = [
+    "https://kerndesignstudio.github.io",
     "https://orbiting0314.github.io",
-  );
+  ];
+  let allowed;
+  for (const origin of allowedOrigins) {
+    allowed = await req("/api/workspaces", { method: "POST", origin });
+    assert.equal(allowed.status, 201);
+    assert.equal(allowed.headers.get("access-control-allow-origin"), origin);
+  }
   assert.equal((await req("/.local/learning-room.sqlite")).status, 404);
   assert.equal(
     (

@@ -2,7 +2,7 @@
 
 Source code from the learning-centre prototype shared in **Living and building in the AI era**, CUHK LDTE 3120, on 5 November 2026.
 
-[Try the live demo](https://orbiting0314.github.io/learning-room-platform/#/) · [Read the classroom prompt](docs/classroom-prompt.md) · [Fork the project](https://github.com/Orbiting0314/learning-room-platform/fork)
+[Try the live demo](https://kerndesignstudio.github.io/learning-room-platform/#/) · [Read the classroom prompt](docs/classroom-prompt.md) · [Fork the project](https://github.com/KernDesignStudio/learning-room-platform/fork)
 
 ![Learning Room's teacher workspace, with fictional learners and a planned English lesson](public/assets/workspace.webp)
 
@@ -35,7 +35,7 @@ The [classroom prompt](docs/classroom-prompt.md) shares the product-focused brie
 Install **Node.js 24 or later** from [nodejs.org](https://nodejs.org/). You do not need a paid AI account, API key or cloud account to run the local application.
 
 ```sh
-git clone https://github.com/Orbiting0314/learning-room-platform.git
+git clone https://github.com/KernDesignStudio/learning-room-platform.git
 cd learning-room-platform
 npm start
 ```

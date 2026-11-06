@@ -27,7 +27,7 @@ export function createApp(options = {}) {
     (
       options.origins ||
       process.env.ALLOWED_ORIGINS ||
-      "https://orbiting0314.github.io,http://127.0.0.1:8788,http://localhost:8788"
+      "https://kerndesignstudio.github.io,https://orbiting0314.github.io,http://127.0.0.1:8788,http://localhost:8788"
     )
       .split(",")
       .map((v) => v.trim()),

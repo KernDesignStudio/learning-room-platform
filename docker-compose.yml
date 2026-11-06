@@ -9,7 +9,7 @@ services:
       DB_PATH: /app/.local/learning-room.sqlite
       SERVE_STATIC: "false"
       TRUST_PROXY: "true"
-      ALLOWED_ORIGINS: https://orbiting0314.github.io
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-https://kerndesignstudio.github.io,https://orbiting0314.github.io}"
     expose:
       - "8788"
     volumes:
